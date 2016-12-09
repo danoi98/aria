@@ -1,7 +1,7 @@
 baseurl = "/"
 relativeurls = true
 languageCode = "en-us"
-title = "Hugo Future Imperfect"
+title = "ariaPalermo"
 theme = "ghostwriter"
 preserveTaxonomyNames = true
 paginate = 3
@@ -12,7 +12,7 @@ googleAnalytics = ""
     # Sets the meta tag description, usually reserved for the main page
     description          = "HTML5 UP theme, Future Imperfect with some extra goodies, ported by Julio Pescador. Powered by Hugo"
     # This will appear on the top left of the navigation bar
-    navbarTitle          = "Future Imperfect"
+    navbarTitle          = "ariapalermo"
     # Social media buttons that appear on the sidebar
     socialAppearAtTop    = true
     socialAppearAtBottom = true
@@ -87,7 +87,7 @@ googleAnalytics = ""
 # socialAppearAtTop or socialAppearAtBottom is set to true in the params area
 # The social media icons will appear on the sidebar
 [social]
-    github          = "jpescador"
+    github          = "SiciliaHub"
     bitbucket       = ""
     jsfiddle        = ""
     codepen         = ""
@@ -113,5 +113,5 @@ googleAnalytics = ""
     facebook        = ""
     facebook_admin  = ""
     twitter_domain  = ""
-    twitter         = "julio_pescador"
+    twitter         = "opendatasicilia"
     email           = ""

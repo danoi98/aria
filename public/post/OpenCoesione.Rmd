@@ -1,0 +1,91 @@
+---
+title: "OpenCoesione"
+author: "Frida Gomam"
+date: 2016-12-09T18:26:14-01:00
+categories: ["R"]
+---
+
+```{r warning=FALSE, message=FALSE}
+library('httr')
+library('jsonlite')
+library('dplyr')
+library('ggplot2')
+library('scales')
+library('DT')
+```
+
+# Functions to query the OpenCoesione API 
+
+```{r}
+
+options(stringsAsFactors = FALSE)
+
+cp <- function(x) Filter(Negate(is.null), x)
+
+user_agent <- 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0'
+
+diss_base <- function() "http://www.opencoesione.gov.it/api"
+
+diss_GET <- function(path = "", args = list(), ...) {
+  
+  x <- httr::GET(file.path(diss_base(), path), query = args, 
+                 httr::add_headers("User-Agent" = user_agent), ...)
+  
+  httr::stop_for_status(x)
+  
+  jsonlite::fromJSON(httr::content(x, "text", 
+                     encoding="UTF-8"))
+}
+
+diss <- function(apiroot = "progetti", territorio = NULL, 
+                 tema = NULL, natura = NULL, ...) {
+  structure(
+    diss_GET(apiroot, args = cp(list(territorio = territorio, 
+                                     tema = tema, 
+                                     natura = natura)), ...), 
+             class = "ropencoesione")
+}
+```
+
+## Make a request
+
+```{r}
+
+req <- diss(apiroot = "aggregati")
+
+str(req, 2)
+
+```
+
+# Top ten regions with the most projects (well, almost...) 
+
+```{r}
+
+top_10_reg <- req$aggregati$territori$regioni %>% 
+  Map(data.frame, .) %>% 
+  bind_rows() %>% 
+  mutate(regione = gsub("-regione", "", basename(link))) %>%
+  arrange(desc(totali.progetti)) %>%
+  top_n(10, wt=totali.progetti)
+```
+
+```{r}
+
+datatable(top_10_reg, filter = "top", options = list(
+  pageLength = 5, autoWidth = TRUE
+))
+
+```
+
+# Barchart
+
+```{r}
+
+ggplot(top_10_reg, aes(reorder(regione, totali.progetti), totali.progetti)) + 
+  geom_bar(stat = "identity") +
+  scale_y_continuous(labels = comma) +
+  labs(x = "", y = "Totali progetti") + 
+  theme(axis.text.x = element_text(angle=45, hjust=1))
+
+```
+

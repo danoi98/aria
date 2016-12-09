@@ -1,0 +1,106 @@
+---
+title: "OpenCoesione"
+author: "Frida Gomam"
+date: 2016-12-09T18:26:14-01:00
+categories: ["R"]
+---
+
+
+<!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE -->
+
+<pre class="r"><code>library(&#39;httr&#39;)
+library(&#39;jsonlite&#39;)
+library(&#39;dplyr&#39;)
+library(&#39;ggplot2&#39;)
+library(&#39;scales&#39;)
+library(&#39;DT&#39;)</code></pre>
+<div id="functions-to-query-the-opencoesione-api" class="section level1">
+<h1>Functions to query the OpenCoesione API</h1>
+<pre class="r"><code>options(stringsAsFactors = FALSE)
+
+cp &lt;- function(x) Filter(Negate(is.null), x)
+
+user_agent &lt;- &#39;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:40.0) Gecko/20100101 Firefox/40.0&#39;
+
+diss_base &lt;- function() &quot;http://www.opencoesione.gov.it/api&quot;
+
+diss_GET &lt;- function(path = &quot;&quot;, args = list(), ...) {
+  
+  x &lt;- httr::GET(file.path(diss_base(), path), query = args, 
+                 httr::add_headers(&quot;User-Agent&quot; = user_agent), ...)
+  
+  httr::stop_for_status(x)
+  
+  jsonlite::fromJSON(httr::content(x, &quot;text&quot;, 
+                     encoding=&quot;UTF-8&quot;))
+}
+
+diss &lt;- function(apiroot = &quot;progetti&quot;, territorio = NULL, 
+                 tema = NULL, natura = NULL, ...) {
+  structure(
+    diss_GET(apiroot, args = cp(list(territorio = territorio, 
+                                     tema = tema, 
+                                     natura = natura)), ...), 
+             class = &quot;ropencoesione&quot;)
+}</code></pre>
+<div id="make-a-request" class="section level2">
+<h2>Make a request</h2>
+<pre class="r"><code>req &lt;- diss(apiroot = &quot;aggregati&quot;)
+
+str(req, 2)</code></pre>
+<pre><code>## List of 2
+##  $ contesto : NULL
+##  $ aggregati:List of 4
+##   ..$ totali   :List of 3
+##   ..$ temi     :List of 13
+##   ..$ nature   :List of 6
+##   ..$ territori:List of 2
+##  - attr(*, &quot;class&quot;)= chr &quot;ropencoesione&quot;</code></pre>
+</div>
+</div>
+<div id="top-ten-regions-with-the-most-projects-well-almost" class="section level1">
+<h1>Top ten regions with the most projects (well, almost…)</h1>
+<pre class="r"><code>top_10_reg &lt;- req$aggregati$territori$regioni %&gt;% 
+  Map(data.frame, .) %&gt;% 
+  bind_rows() %&gt;% 
+  mutate(regione = gsub(&quot;-regione&quot;, &quot;&quot;, basename(link))) %&gt;%
+  arrange(desc(totali.progetti)) %&gt;%
+  top_n(10, wt=totali.progetti)</code></pre>
+<pre class="r"><code>datatable(top_10_reg, filter = &quot;top&quot;, options = list(
+  pageLength = 5, autoWidth = TRUE
+))</code></pre>
+<div id="htmlwidget-a690f500da07b7675349" style="width:100%;height:auto;" class="datatables html-widget"></div>
+<script type="application/json" data-for="htmlwidget-a690f500da07b7675349">{"x":{"filter":"top","filterHTML":"<tr>\n  <td>\u003c/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\">\u003c/span>\n    \u003c/div>\n  \u003c/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\">\u003c/span>\n    \u003c/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"963683591\" data-max=\"24962521530\">\u003c/div>\n      <span style=\"float: left;\">\u003c/span>\n      <span style=\"float: right;\">\u003c/span>\n    \u003c/div>\n  \u003c/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\">\u003c/span>\n    \u003c/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"27606\" data-max=\"402952\">\u003c/div>\n      <span style=\"float: left;\">\u003c/span>\n      <span style=\"float: right;\">\u003c/span>\n    \u003c/div>\n  \u003c/td>\n  <td data-type=\"number\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\">\u003c/span>\n    \u003c/div>\n    <div style=\"display: none; position: absolute; width: 200px;\">\n      <div data-min=\"705291765\" data-max=\"12098325478\">\u003c/div>\n      <span style=\"float: left;\">\u003c/span>\n      <span style=\"float: right;\">\u003c/span>\n    \u003c/div>\n  \u003c/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\">\u003c/span>\n    \u003c/div>\n  \u003c/td>\n\u003c/tr>","data":[["1","2","3","4","5","6","7","8","9","10"],["http://www.opencoesione.gov.it/api/aggregati/territori/lombardia-regione","http://www.opencoesione.gov.it/api/aggregati/territori/puglia-regione","http://www.opencoesione.gov.it/api/aggregati/territori/friuli-venezia-giulia-regione","http://www.opencoesione.gov.it/api/aggregati/territori/toscana-regione","http://www.opencoesione.gov.it/api/aggregati/territori/campania-regione","http://www.opencoesione.gov.it/api/aggregati/territori/sicilia-regione","http://www.opencoesione.gov.it/api/aggregati/territori/piemonte-regione","http://www.opencoesione.gov.it/api/aggregati/territori/calabria-regione","http://www.opencoesione.gov.it/api/aggregati/territori/marche-regione","http://www.opencoesione.gov.it/api/aggregati/territori/abruzzo-regione"],[2578041958,18250137001,963683591,3096445760,24962521530,19390882678,3272896827,10503346174,982154933,1399806474],[402952,72583,64886,64247,52466,51222,37172,36062,29815,27606],[2164411038,10947972913,705291765,2644262304,12098325478,10225072682,2333757399,6815398746,821107998,750918193],["lombardia","puglia","friuli-venezia-giulia","toscana","campania","sicilia","piemonte","calabria","marche","abruzzo"]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th> \u003c/th>\n      <th>link\u003c/th>\n      <th>totali.costi\u003c/th>\n      <th>totali.progetti\u003c/th>\n      <th>totali.pagamenti\u003c/th>\n      <th>regione\u003c/th>\n    \u003c/tr>\n  \u003c/thead>\n\u003c/table>","options":{"pageLength":5,"autoWidth":true,"columnDefs":[{"className":"dt-right","targets":[2,3,4]},{"orderable":false,"targets":0}],"order":[],"orderClasses":false,"orderCellsTop":true,"lengthMenu":[5,10,25,50,100]},"selection":{"mode":"multiple","selected":null,"target":"row"}},"evals":[],"jsHooks":[]}</script>
+</div>
+<div id="barchart" class="section level1">
+<h1>Barchart</h1>
+<pre class="r"><code>ggplot(top_10_reg, aes(reorder(regione, totali.progetti), totali.progetti)) + 
+  geom_bar(stat = &quot;identity&quot;) +
+  scale_y_continuous(labels = comma) +
+  labs(x = &quot;&quot;, y = &quot;Totali progetti&quot;) + 
+  theme(axis.text.x = element_text(angle=45, hjust=1))</code></pre>
+<p><img src="#####../content/post/OpenCoesione_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+</div>
+
+
+
+<!-- BLOGDOWN-HEAD
+
+<script src="#####../content/post/OpenCoesione_files/htmlwidgets-0.8/htmlwidgets.js"></script>
+<script src="#####../content/post/OpenCoesione_files/jquery-1.12.4/jquery.min.js"></script>
+<script src="#####../content/post/OpenCoesione_files/datatables-binding-0.2/datatables.js"></script>
+<link href="#####../content/post/OpenCoesione_files/dt-core-1.10.12/css/jquery.dataTables.min.css" rel="stylesheet" />
+<link href="#####../content/post/OpenCoesione_files/dt-core-1.10.12/css/jquery.dataTables.extra.css" rel="stylesheet" />
+<script src="#####../content/post/OpenCoesione_files/dt-core-1.10.12/js/jquery.dataTables.min.js"></script>
+<link href="#####../content/post/OpenCoesione_files/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet" />
+<script src="#####../content/post/OpenCoesione_files/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+<link href="#####../content/post/OpenCoesione_files/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="#####../content/post/OpenCoesione_files/selectize-0.12.0/selectize.min.js"></script>
+
+
+
+
+
+/BLOGDOWN-HEAD -->
