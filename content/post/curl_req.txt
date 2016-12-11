@@ -1,0 +1,132 @@
+[[1]]
+$url
+[1] "https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&objectIds=&time=&geometry=310540%2C4877403%2C517061%2C5147916&geometryType=esriGeometryEnvelope&inSR=32632&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Meter&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson"
+
+$method
+[1] "get"
+
+$url_parts
+$scheme
+[1] "https"
+
+$hostname
+[1] "webgis.arpa.piemonte.it"
+
+$port
+NULL
+
+$path
+[1] "ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query"
+
+$query
+$query$where
+[1] ""
+
+$query$objectIds
+[1] ""
+
+$query$time
+[1] ""
+
+$query$geometry
+[1] "310540,4877403,517061,5147916"
+
+$query$geometryType
+[1] "esriGeometryEnvelope"
+
+$query$inSR
+[1] "32632"
+
+$query$spatialRel
+[1] "esriSpatialRelIntersects"
+
+$query$distance
+[1] ""
+
+$query$units
+[1] "esriSRUnit_Meter"
+
+$query$relationParam
+[1] ""
+
+$query$outFields
+[1] "*"
+
+$query$returnGeometry
+[1] "true"
+
+$query$maxAllowableOffset
+[1] ""
+
+$query$geometryPrecision
+[1] ""
+
+$query$outSR
+[1] "4326"
+
+$query$gdbVersion
+[1] ""
+
+$query$returnDistinctValues
+[1] "false"
+
+$query$returnIdsOnly
+[1] "false"
+
+$query$returnCountOnly
+[1] "false"
+
+$query$returnExtentOnly
+[1] "false"
+
+$query$orderByFields
+[1] ""
+
+$query$groupByFieldsForStatistics
+[1] ""
+
+$query$outStatistics
+[1] ""
+
+$query$returnZ
+[1] "false"
+
+$query$returnM
+[1] "false"
+
+$query$multipatchOption
+[1] ""
+
+$query$resultOffset
+[1] ""
+
+$query$resultRecordCount
+[1] ""
+
+$query$f
+[1] "pjson"
+
+
+$params
+NULL
+
+$fragment
+NULL
+
+$username
+NULL
+
+$password
+NULL
+
+attr(,"class")
+[1] "url"  "list"
+
+$orig_curl
+[1] "curl https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&objectIds=&time=&geometry=310540%2C4877403%2C517061%2C5147916&geometryType=esriGeometryEnvelope&inSR=32632&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Meter&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson"
+
+attr(,"class")
+[1] "cc_obj" "list"  
+
+attr(,"class")
+[1] "cc_container" "list"        

@@ -1,0 +1,65 @@
+---
+title: "Leaflet, curlconverter"
+author: "Patrick Hausmann"
+date: 2016-12-11T09:25:14-01:00
+categories: ["R"]
+---
+  
+# curlconverter and Leaflet 
+  
+See [Issue 3](https://github.com/ondata/lariachetira/issues/3)
+
+```{r warning=FALSE, message=FALSE}
+library('dplyr')
+library('jsonlite')
+library('httr')
+library('curlconverter')
+library('leaflet')
+
+```
+
+
+```{r}
+
+curl_line <- "curl https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&objectIds=&time=&geometry=310540%2C4877403%2C517061%2C5147916&geometryType=esriGeometryEnvelope&inSR=32632&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Meter&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson"
+
+capture.output(straighten(curl_line), file = "curl_req.txt")
+
+```
+
+The `curl` [request](https://www.ariapalermo.info/post/leaflet/curl_req.txt)
+
+Make the request
+
+```{r}
+
+straighten(curl_line) %>% 
+  make_req() -> get_data
+```
+
+```{r}
+
+get_data[[1]]()
+
+res <- fromJSON(content((get_data[[1]]())))
+
+str(res, 2)
+
+r_fields   <- tbl_df(jsonlite::flatten(res$fields))
+r_features <- tbl_df(jsonlite::flatten(res$features))
+
+glimpse(r_fields)
+glimpse(r_features)
+
+
+```
+
+```{r}
+
+leaflet(data = r_features) %>% 
+        addTiles() %>%
+        addMarkers(~geometry.x,
+                   ~geometry.y, 
+                   popup = ~as.character(attributes.COMUNE))
+
+```

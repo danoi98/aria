@@ -9,6 +9,126 @@
     <atom:link href="/categories/r/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Leaflet, curlconverter</title>
+      <link>/post/leaflet/</link>
+      <pubDate>Sun, 11 Dec 2016 09:25:14 -0100</pubDate>
+      
+      <guid>/post/leaflet/</guid>
+      <description>&lt;!-- BLOGDOWN-BODY-BEFORE
+
+/BLOGDOWN-BODY-BEFORE --&gt;
+
+&lt;div id=&#34;curlconverter-and-leaflet&#34; class=&#34;section level1&#34;&gt;
+&lt;h1&gt;curlconverter and Leaflet&lt;/h1&gt;
+&lt;p&gt;See &lt;a href=&#34;https://github.com/ondata/lariachetira/issues/3&#34;&gt;Issue 3&lt;/a&gt;&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;library(&amp;#39;dplyr&amp;#39;)
+library(&amp;#39;jsonlite&amp;#39;)
+library(&amp;#39;httr&amp;#39;)
+library(&amp;#39;curlconverter&amp;#39;)
+library(&amp;#39;leaflet&amp;#39;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;curl_line &amp;lt;- &amp;quot;curl https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&amp;amp;objectIds=&amp;amp;time=&amp;amp;geometry=310540%2C4877403%2C517061%2C5147916&amp;amp;geometryType=esriGeometryEnvelope&amp;amp;inSR=32632&amp;amp;spatialRel=esriSpatialRelIntersects&amp;amp;distance=&amp;amp;units=esriSRUnit_Meter&amp;amp;relationParam=&amp;amp;outFields=*&amp;amp;returnGeometry=true&amp;amp;maxAllowableOffset=&amp;amp;geometryPrecision=&amp;amp;outSR=4326&amp;amp;gdbVersion=&amp;amp;returnDistinctValues=false&amp;amp;returnIdsOnly=false&amp;amp;returnCountOnly=false&amp;amp;returnExtentOnly=false&amp;amp;orderByFields=&amp;amp;groupByFieldsForStatistics=&amp;amp;outStatistics=&amp;amp;returnZ=false&amp;amp;returnM=false&amp;amp;multipatchOption=&amp;amp;resultOffset=&amp;amp;resultRecordCount=&amp;amp;f=pjson&amp;quot;
+
+capture.output(straighten(curl_line), file = &amp;quot;curl_req.txt&amp;quot;)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## curl https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&amp;amp;objectIds=&amp;amp;time=&amp;amp;geometry=310540%2C4877403%2C517061%2C5147916&amp;amp;geometryType=esriGeometryEnvelope&amp;amp;inSR=32632&amp;amp;spatialRel=esriSpatialRelIntersects&amp;amp;distance=&amp;amp;units=esriSRUnit_Meter&amp;amp;relationParam=&amp;amp;outFields=*&amp;amp;returnGeometry=true&amp;amp;maxAllowableOffset=&amp;amp;geometryPrecision=&amp;amp;outSR=4326&amp;amp;gdbVersion=&amp;amp;returnDistinctValues=false&amp;amp;returnIdsOnly=false&amp;amp;returnCountOnly=false&amp;amp;returnExtentOnly=false&amp;amp;orderByFields=&amp;amp;groupByFieldsForStatistics=&amp;amp;outStatistics=&amp;amp;returnZ=false&amp;amp;returnM=false&amp;amp;multipatchOption=&amp;amp;resultOffset=&amp;amp;resultRecordCount=&amp;amp;f=pjson&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;The &lt;code&gt;curl&lt;/code&gt; &lt;a href=&#34;https://www.ariapalermo.info/post/leaflet/curl_req.txt&#34;&gt;request&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;Make the request&lt;/p&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;straighten(curl_line) %&amp;gt;% 
+  make_req() -&amp;gt; get_data&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## curl https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&amp;amp;objectIds=&amp;amp;time=&amp;amp;geometry=310540%2C4877403%2C517061%2C5147916&amp;amp;geometryType=esriGeometryEnvelope&amp;amp;inSR=32632&amp;amp;spatialRel=esriSpatialRelIntersects&amp;amp;distance=&amp;amp;units=esriSRUnit_Meter&amp;amp;relationParam=&amp;amp;outFields=*&amp;amp;returnGeometry=true&amp;amp;maxAllowableOffset=&amp;amp;geometryPrecision=&amp;amp;outSR=4326&amp;amp;gdbVersion=&amp;amp;returnDistinctValues=false&amp;amp;returnIdsOnly=false&amp;amp;returnCountOnly=false&amp;amp;returnExtentOnly=false&amp;amp;orderByFields=&amp;amp;groupByFieldsForStatistics=&amp;amp;outStatistics=&amp;amp;returnZ=false&amp;amp;returnM=false&amp;amp;multipatchOption=&amp;amp;resultOffset=&amp;amp;resultRecordCount=&amp;amp;f=pjson&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;get_data[[1]]()&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Response [https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&amp;amp;objectIds=&amp;amp;time=&amp;amp;geometry=310540%2C4877403%2C517061%2C5147916&amp;amp;geometryType=esriGeometryEnvelope&amp;amp;inSR=32632&amp;amp;spatialRel=esriSpatialRelIntersects&amp;amp;distance=&amp;amp;units=esriSRUnit_Meter&amp;amp;relationParam=&amp;amp;outFields=*&amp;amp;returnGeometry=true&amp;amp;maxAllowableOffset=&amp;amp;geometryPrecision=&amp;amp;outSR=4326&amp;amp;gdbVersion=&amp;amp;returnDistinctValues=false&amp;amp;returnIdsOnly=false&amp;amp;returnCountOnly=false&amp;amp;returnExtentOnly=false&amp;amp;orderByFields=&amp;amp;groupByFieldsForStatistics=&amp;amp;outStatistics=&amp;amp;returnZ=false&amp;amp;returnM=false&amp;amp;multipatchOption=&amp;amp;resultOffset=&amp;amp;resultRecordCount=&amp;amp;f=pjson]
+##   Date: 2016-12-11 08:23
+##   Status: 200
+##   Content-Type: text/plain;charset=utf-8
+##   Size: 41.6 kB
+## {
+##  &amp;quot;objectIdFieldName&amp;quot;: &amp;quot;OBJECTID&amp;quot;,
+##  &amp;quot;globalIdFieldName&amp;quot;: &amp;quot;&amp;quot;,
+##  &amp;quot;geometryType&amp;quot;: &amp;quot;esriGeometryPoint&amp;quot;,
+##  &amp;quot;spatialReference&amp;quot;: {
+##   &amp;quot;wkid&amp;quot;: 4326,
+##   &amp;quot;latestWkid&amp;quot;: 4326
+##  },
+##  &amp;quot;fields&amp;quot;: [
+##   {
+## ...&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;res &amp;lt;- fromJSON(content((get_data[[1]]())))
+
+str(res, 2)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## List of 6
+##  $ objectIdFieldName: chr &amp;quot;OBJECTID&amp;quot;
+##  $ globalIdFieldName: chr &amp;quot;&amp;quot;
+##  $ geometryType     : chr &amp;quot;esriGeometryPoint&amp;quot;
+##  $ spatialReference :List of 2
+##   ..$ wkid      : int 4326
+##   ..$ latestWkid: int 4326
+##  $ fields           :&amp;#39;data.frame&amp;#39;:   15 obs. of  4 variables:
+##   ..$ name  : chr [1:15] &amp;quot;OBJECTID&amp;quot; &amp;quot;DENOMINAZIONE&amp;quot; &amp;quot;CODICE_ISTAT_COMUNE&amp;quot; &amp;quot;PROGR_PUNTO_COM&amp;quot; ...
+##   ..$ alias : chr [1:15] &amp;quot;OBJECTID&amp;quot; &amp;quot;Nome stazione&amp;quot; &amp;quot;Codice ISTAT del comune&amp;quot; &amp;quot;PROGR_PUNTO_COM&amp;quot; ...
+##   ..$ type  : chr [1:15] &amp;quot;esriFieldTypeOID&amp;quot; &amp;quot;esriFieldTypeString&amp;quot; &amp;quot;esriFieldTypeString&amp;quot; &amp;quot;esriFieldTypeSmallInteger&amp;quot; ...
+##   ..$ length: int [1:15] NA 80 6 NA 10 15 80 40 NA NA ...
+##  $ features         :&amp;#39;data.frame&amp;#39;:   57 obs. of  2 variables:
+##   ..$ geometry  :&amp;#39;data.frame&amp;#39;:   57 obs. of  2 variables:
+##   ..$ attributes:&amp;#39;data.frame&amp;#39;:   57 obs. of  15 variables:&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;r_fields   &amp;lt;- tbl_df(jsonlite::flatten(res$fields))
+r_features &amp;lt;- tbl_df(jsonlite::flatten(res$features))
+
+glimpse(r_fields)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Observations: 15
+## Variables: 4
+## $ name   &amp;lt;chr&amp;gt; &amp;quot;OBJECTID&amp;quot;, &amp;quot;DENOMINAZIONE&amp;quot;, &amp;quot;CODICE_ISTAT_COMUNE&amp;quot;, &amp;quot;PR...
+## $ alias  &amp;lt;chr&amp;gt; &amp;quot;OBJECTID&amp;quot;, &amp;quot;Nome stazione&amp;quot;, &amp;quot;Codice ISTAT del comune&amp;quot;,...
+## $ type   &amp;lt;chr&amp;gt; &amp;quot;esriFieldTypeOID&amp;quot;, &amp;quot;esriFieldTypeString&amp;quot;, &amp;quot;esriFieldTy...
+## $ length &amp;lt;int&amp;gt; NA, 80, 6, NA, 10, 15, 80, 40, NA, NA, 30, 30, NA, 36, 250&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;glimpse(r_features)&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code&gt;## Observations: 57
+## Variables: 17
+## $ geometry.x                      &amp;lt;dbl&amp;gt; 8.169511, 7.778179, 7.050056, ...
+## $ geometry.y                      &amp;lt;dbl&amp;gt; 44.41223, 45.14320, 45.13911, ...
+## $ attributes.OBJECTID             &amp;lt;int&amp;gt; 42, 43, 44, 45, 46, 47, 48, 49...
+## $ attributes.DENOMINAZIONE        &amp;lt;chr&amp;gt; &amp;quot;Saliceto - Moizo&amp;quot;, &amp;quot;Settimo T...
+## $ attributes.CODICE_ISTAT_COMUNE  &amp;lt;chr&amp;gt; &amp;quot;004201&amp;quot;, &amp;quot;001265&amp;quot;, &amp;quot;001270&amp;quot;, ...
+## $ attributes.PROGR_PUNTO_COM      &amp;lt;int&amp;gt; 800, 802, 801, 803, 819, 806, ...
+## $ attributes.CODICE_EOI           &amp;lt;chr&amp;gt; &amp;quot;IT1519A&amp;quot;, &amp;quot;IT1130A&amp;quot;, &amp;quot;IT1114A...
+## $ attributes.RILEVANZA            &amp;lt;chr&amp;gt; &amp;quot;Nazionale&amp;quot;, &amp;quot;Nazionale&amp;quot;, &amp;quot;Naz...
+## $ attributes.INDIRIZZO_LOCALITA   &amp;lt;chr&amp;gt; &amp;quot;via Monsignor G. Moizo - Sali...
+## $ attributes.COMUNE               &amp;lt;chr&amp;gt; &amp;quot;SALICETO&amp;quot;, &amp;quot;SETTIMO TORINESE&amp;quot;...
+## $ attributes.UTM_X_WGS84          &amp;lt;int&amp;gt; 433879, 403942, 346687, 395961...
+## $ attributes.UTM_Y_WGS84          &amp;lt;int&amp;gt; 4917995, 4999584, 5000254, 499...
+## $ attributes.TIPO_STAZIONE        &amp;lt;chr&amp;gt; &amp;quot;Background&amp;quot;, &amp;quot;Traffico&amp;quot;, &amp;quot;Bac...
+## $ attributes.TIPO_ZONA            &amp;lt;chr&amp;gt; &amp;quot;Rurale&amp;quot;, &amp;quot;Urbana&amp;quot;, &amp;quot;Suburbana...
+## $ attributes.QUOTA_SITO           &amp;lt;int&amp;gt; 388, 201, 494, 243, 245, 243, ...
+## $ attributes.DATA_INIZIO_STAZIONE &amp;lt;dbl&amp;gt; 9.440064e+11, 1.072915e+12, 9....
+## $ attributes.LINK                 &amp;lt;chr&amp;gt; &amp;quot;http://webgis.arpa.piemonte.i...&lt;/code&gt;&lt;/pre&gt;
+&lt;pre class=&#34;r&#34;&gt;&lt;code&gt;leaflet(data = r_features) %&amp;gt;% 
+        addTiles() %&amp;gt;%
+        addMarkers(~geometry.x,
+                   ~geometry.y, 
+                   popup = ~as.character(attributes.COMUNE))&lt;/code&gt;&lt;/pre&gt;
+&lt;div id=&#34;htmlwidget-6187088c18400f7ff419&#34; style=&#34;width:672px;height:480px;&#34; class=&#34;leaflet html-widget&#34;&gt;&lt;/div&gt;
+&lt;script type=&#34;application/json&#34; data-for=&#34;htmlwidget-6187088c18400f7ff419&#34;&gt;{&#34;x&#34;:{&#34;calls&#34;:[{&#34;method&#34;:&#34;addTiles&#34;,&#34;args&#34;:[&#34;http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png&#34;,null,null,{&#34;minZoom&#34;:0,&#34;maxZoom&#34;:18,&#34;maxNativeZoom&#34;:null,&#34;tileSize&#34;:256,&#34;subdomains&#34;:&#34;abc&#34;,&#34;errorTileUrl&#34;:&#34;&#34;,&#34;tms&#34;:false,&#34;continuousWorld&#34;:false,&#34;noWrap&#34;:false,&#34;zoomOffset&#34;:0,&#34;zoomReverse&#34;:false,&#34;opacity&#34;:1,&#34;zIndex&#34;:null,&#34;unloadInvisibleTiles&#34;:null,&#34;updateWhenIdle&#34;:null,&#34;detectRetina&#34;:false,&#34;reuseTiles&#34;:false,&#34;attribution&#34;:&#34;&amp;copy; &lt;a href=\&#34;http://openstreetmap.org\&#34;&gt;OpenStreetMap\u003c/a&gt; contributors, &lt;a href=\&#34;http://creativecommons.org/licenses/by-sa/2.0/\&#34;&gt;CC-BY-SA\u003c/a&gt;&#34;}]},{&#34;method&#34;:&#34;addMarkers&#34;,&#34;args&#34;:[[44.4122269042883,45.1431964584971,45.1391143911266,45.0758482090951,45.1110222687119,45.0249435019195,45.1040679408146,45.0418791291196,44.8978003721009,45.4372838677559,45.66423456063,45.9303434373705,45.3189103971977,45.3284190225424,44.8080150445481,44.9513073004702,44.7037106112963,44.9066076943088,44.9203013165931,44.6913317149396,44.8942212453582,44.9089318861935,46.3147828316626,45.0723648800464,45.0298143305289,45.5641754511672,45.5588176985202,45.1546392210095,45.6894427774844,45.7131690079541,44.7061485743037,44.8475434488992,45.1361244927165,45.7135263307025,45.4097295101055,45.4302239761148,45.0027571451156,45.2947473223748,45.0725818793915,45.5691063311551,44.3817546437549,44.7633457825831,46.1276051600013,45.1757715776922,45.4511983993673,45.1763468116121,44.4018567893547,45.4403415803512,45.4383103656099,44.7581410410165,45.5934962030586,45.8988492664051,45.0068722941271,45.0347959269978,46.011725322574,44.8843096305865,44.719762748306],[8.16951140007122,7.77817889839218,7.0500555340948,7.67821917551819,7.66310587641266,7.64905410712559,7.69536332709978,7.62592764371472,8.85964207037217,8.74333070936112,8.15981252647369,8.56548096147769,8.40236172219409,8.41513759335765,8.31031449052647,7.63615357082346,8.03302784511732,8.61199966926201,8.62319678759654,8.88172239706189,8.19755769656562,8.20546044368616,8.25592214247927,7.79287592946469,7.5976030503736,8.05121780896508,8.05639478656206,7.65804061527508,8.45844276126285,8.28352821133762,7.84310442680179,7.71399948635197,8.44517535519878,8.60231750221539,8.78631731705198,7.24540269539593,7.83747966395866,8.04338888366856,7.5779333118443,8.18760619086178,7.53819662043763,9.05242670029849,8.2921147452567,7.56019635597103,7.87803689929034,7.71158236496873,7.81463429153098,8.61968696634585,8.62060840030822,8.79472159109324,8.64507782683,8.41573931967004,7.54962609221529,6.83592443867447,8.26900015608698,7.33020581595934,7.42622327635192],null,null,null,{&#34;clickable&#34;:true,&#34;draggable&#34;:false,&#34;keyboard&#34;:true,&#34;title&#34;:&#34;&#34;,&#34;alt&#34;:&#34;&#34;,&#34;zIndexOffset&#34;:0,&#34;opacity&#34;:1,&#34;riseOnHover&#34;:false,&#34;riseOffset&#34;:250},[&#34;SALICETO&#34;,&#34;SETTIMO TORINESE&#34;,&#34;SUSA&#34;,&#34;TORINO&#34;,&#34;TORINO&#34;,&#34;TORINO&#34;,&#34;TORINO&#34;,&#34;TORINO&#34;,&#34;TORTONA&#34;,&#34;TRECATE&#34;,&#34;TRIVERO&#34;,&#34;VERBANIA&#34;,&#34;VERCELLI&#34;,&#34;VERCELLI&#34;,&#34;VINCHIO&#34;,&#34;VINOVO&#34;,&#34;ALBA&#34;,&#34;ALESSANDRIA&#34;,&#34;ALESSANDRIA&#34;,&#34;ARQUATA SCRIVIA&#34;,&#34;ASTI&#34;,&#34;ASTI&#34;,&#34;BACENO&#34;,&#34;BALDISSERO TORINESE&#34;,&#34;BEINASCO&#34;,&#34;BIELLA&#34;,&#34;BIELLA&#34;,&#34;BORGARO TORINESE&#34;,&#34;BORGOMANERO&#34;,&#34;BORGOSESIA&#34;,&#34;BRA&#34;,&#34;CARMAGNOLA&#34;,&#34;CASALE MONFERRATO&#34;,&#34;CASTELLETTO SOPRA TICINO&#34;,&#34;CERANO&#34;,&#34;CERESOLE REALE&#34;,&#34;CHIERI&#34;,&#34;CIGLIANO&#34;,&#34;COLLEGNO&#34;,&#34;COSSATO&#34;,&#34;CUNEO&#34;,&#34;DERNICE&#34;,&#34;DOMODOSSOLA&#34;,&#34;DRUENTO&#34;,&#34;IVREA&#34;,&#34;LEINI&#39;&#34;,&#34;MONDOVI&#39;&#34;,&#34;NOVARA&#34;,&#34;NOVARA&#34;,&#34;NOVI LIGURE&#34;,&#34;OLEGGIO&#34;,&#34;OMEGNA&#34;,&#34;ORBASSANO&#34;,&#34;OULX&#34;,&#34;PIEVE VERGONTE&#34;,&#34;PINEROLO&#34;,&#34;REVELLO&#34;],null,null]}],&#34;limits&#34;:{&#34;lat&#34;:[44.3817546437549,46.3147828316626],&#34;lng&#34;:[6.83592443867447,9.05242670029849]}},&#34;evals&#34;:[],&#34;jsHooks&#34;:[]}&lt;/script&gt;
+&lt;/div&gt;
+
+
+
+&lt;!-- BLOGDOWN-HEAD
+
+&lt;script src=&#34;#####../content/post/leaflet_files/htmlwidgets-0.8/htmlwidgets.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;#####../content/post/leaflet_files/jquery-1.11.1/jquery.min.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;#####../content/post/leaflet_files/leaflet-0.7.3/leaflet.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;#####../content/post/leaflet_files/leaflet-0.7.3/leaflet.js&#34;&gt;&lt;/script&gt;
+&lt;link href=&#34;#####../content/post/leaflet_files/leafletfix-1.0.0/leafletfix.css&#34; rel=&#34;stylesheet&#34; /&gt;
+&lt;script src=&#34;#####../content/post/leaflet_files/leaflet-binding-1.0.1/leaflet.js&#34;&gt;&lt;/script&gt;
+
+
+
+
+
+/BLOGDOWN-HEAD --&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Plotly</title>
       <link>/post/plotly/</link>
       <pubDate>Sun, 11 Dec 2016 07:26:14 -0100</pubDate>
