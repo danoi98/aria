@@ -23,11 +23,14 @@ library('leaflet')
 
 curl_line <- "curl https://webgis.arpa.piemonte.it/ags101free/rest/services/aria/Sistema_rilevamento_regionale_qualita_aria/FeatureServer/0/query?where=&objectIds=&time=&geometry=310540%2C4877403%2C517061%2C5147916&geometryType=esriGeometryEnvelope&inSR=32632&spatialRel=esriSpatialRelIntersects&distance=&units=esriSRUnit_Meter&relationParam=&outFields=*&returnGeometry=true&maxAllowableOffset=&geometryPrecision=&outSR=4326&gdbVersion=&returnDistinctValues=false&returnIdsOnly=false&returnCountOnly=false&returnExtentOnly=false&orderByFields=&groupByFieldsForStatistics=&outStatistics=&returnZ=false&returnM=false&multipatchOption=&resultOffset=&resultRecordCount=&f=pjson"
 
-capture.output(straighten(curl_line), file = "curl_req.txt")
-
 ```
 
-The `curl` [request](https://www.ariapalermo.info/post/leaflet/curl_req.txt)
+
+```{r}
+
+print(straighten(curl_line))
+
+```
 
 Make the request
 
