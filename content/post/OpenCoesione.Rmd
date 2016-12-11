@@ -89,3 +89,10 @@ ggplot(top_10_reg, aes(reorder(regione, totali.progetti), totali.progetti)) +
 
 ```
 
+
+```{r}
+
+DT::datatable(iris)
+
+```
+
