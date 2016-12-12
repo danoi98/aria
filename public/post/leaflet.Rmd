@@ -44,7 +44,7 @@ straighten(curl_line) %>%
 
 get_data[[1]]()
 
-res <- fromJSON(content((get_data[[1]]())))
+res <- fromJSON(content(get_data[[1]]()))
 
 str(res, 2)
 
